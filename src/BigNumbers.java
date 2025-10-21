@@ -2,7 +2,7 @@ public class BigNumbers {
     public BigNumbers() {
     }
 
-    public int[] sum(int[] bigNr1, int[] bigNr2){
+    public int[] add(int[] bigNr1, int[] bigNr2){
         int carry = 0;
         if (bigNr1.length != bigNr2.length || bigNr1[0] == 0 || bigNr2[0] == 0)
             throw new Error("Length differs");
@@ -21,7 +21,7 @@ public class BigNumbers {
         return result;
     }
 
-    public int[] sub(int[] bigNr1, int[] bigNr2){
+    public int[] subtract(int[] bigNr1, int[] bigNr2){
         int borrowed = 0;
         if (bigNr1.length != bigNr2.length || bigNr1[0] == 0 || bigNr2[0] == 0)
             throw new Error("Length differs");
@@ -74,11 +74,10 @@ public class BigNumbers {
     }
 
     public int[] multiply(int[] bigNr, int digit) {
-        int n = bigNr.length;
-        int[] result = new int[n + 1];
+        int[] result = new int[bigNr.length + 1];
         int carry = 0;
 
-        for (int i = n - 1; i >= 0; i--) {
+        for (int i = bigNr.length - 1; i >= 0; i--) {
             int prod = bigNr[i] * digit + carry;
             result[i + 1] = prod % 10;
             carry = prod / 10;
@@ -92,6 +91,32 @@ public class BigNumbers {
         } else
             result[0] = carry;
 
+        return result;
+    }
+
+    public int[] divide(int[] bigNr, int divisor) {
+        int[] result = new int[bigNr.length];
+        int remainder = 0;
+
+        for (int i = 0; i < bigNr.length; i++) {
+            int current = remainder * 10 + bigNr[i];
+            result[i] = current / divisor;
+            remainder = current % divisor;
+        }
+
+        int firstNonZero = 0;
+        while (firstNonZero < result.length - 1 && result[firstNonZero] == 0) {
+            firstNonZero++;
+        }
+        if (firstNonZero != 0){
+            int[] trimmed = new int[result.length - firstNonZero];
+            int trimmedIndex = 0;
+            for (int index = firstNonZero; index < result.length; index++) {
+                trimmed[trimmedIndex] = result[index];
+                trimmedIndex++;
+            }
+            result = trimmed;
+        }
         return result;
     }
 }
